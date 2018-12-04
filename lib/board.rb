@@ -51,4 +51,11 @@ class Board
           end
         end
       end
+
+    def place(ship, coordinates)
+      coordinates.each do |coordinate|
+      @cells[coordinate].ship = ship
+      end
     end
+
+end
