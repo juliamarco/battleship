@@ -4,6 +4,7 @@ class Cell
   def initialize(coordinate)
     @coordinate = coordinate
     @ship = nil
+
   end
 
   def empty?
@@ -19,11 +20,22 @@ class Cell
   end
 
   def fired_upon?
-    if @ship.health < @ship.length
-      true
-    else
-      false
-    end
+    @ship.health < @ship.length
   end
+
+  # def render
+  #   if @ship.sunk?
+  #     "X"
+  #   elsif fired_upon?
+  #     "H"
+  #   elsif fired_upon?
+  #   else
+  #     "."
+  #   end
+  # end
+  end
+
+
+
 
 end
