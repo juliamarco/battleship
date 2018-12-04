@@ -13,4 +13,17 @@ class Cell
   def place_ship(ship)
     @ship = ship
   end
+
+  def fire_upon
+    @ship.hit
+  end
+
+  def fired_upon?
+    if @ship.health < @ship.length
+      true
+    else
+      false
+    end
+  end
+
 end
