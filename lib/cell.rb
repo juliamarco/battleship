@@ -7,10 +7,10 @@ class Cell
   end
 
   def empty?
-    cell.ship.nil?
+    @ship.nil?
   end
 
   def place_ship(ship)
-    @ship << ship
+    @ship = ship
   end
 end
