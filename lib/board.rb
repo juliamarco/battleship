@@ -39,14 +39,23 @@ class Board
     end
       false
     else
+      letter_ordinates = []
+      number_ordinates = []
       coordinate_pairs = []
       coordinates.each_cons(2).each do |pair|
         coordinate_pairs << pair
       end
+      coordinate_pairs.flatten.each do |coordinate|
+        letter_ordinates << coordinate[0].ord
+        number_ordinates << coordinate[1].ord
+      end
+      if letter_ordinates.uniq.length > 1 && number_ordinates.uniq.length > 1
+         return false
+      end
       coordinate_pairs.all? do |pair|
-        letter_shift = pair[1][0].ord - pair[0][0].ord
-        number_shift = pair[1][1].ord - pair[0][1].ord
-        letter_shift + number_shift == 1
+        vertical_shift = pair[1][0].ord - pair[0][0].ord
+        horizontal_shift = pair[1][1].ord - pair[0][1].ord
+        vertical_shift + horizontal_shift == 1
       end
     end
   end
@@ -59,6 +68,7 @@ class Board
 
   def render(show_ships = false)
     cell_display = []
+    empty_display = ["  1 2 3 4 \nA ", "\nB ", "\nC ", "\nD ", "\n"]
     @cells.values.each do |cell|
       if show_ships == true
         cell_display << cell.render(true)
@@ -66,8 +76,12 @@ class Board
         cell_display << cell.render
       end
     end
-    p cell_display
+     cell_display = cell_display.each_slice(4).to_a
+    p empty_display
   end
+
+
+
 end
 # board = Board.new
 # cruiser = Ship.new('Cruiser', 3)
