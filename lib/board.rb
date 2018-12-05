@@ -76,14 +76,14 @@ class Board
         cell_display << cell.render
       end
     end
-     cell_display = cell_display.each_slice(4).to_a
-    p empty_display
+    cell_display = cell_display.each_slice(4).to_a
+    empty_display.zip(cell_display).flatten.compact.join(" ")
   end
 
 
 
 end
-# board = Board.new
-# cruiser = Ship.new('Cruiser', 3)
-# board.place(cruiser, ['A1', 'A2', 'A3'])
-# board.render(true)
+board = Board.new
+cruiser = Ship.new('Cruiser', 3)
+board.place(cruiser, ['A1', 'A2', 'A3'])
+p board.render(true)

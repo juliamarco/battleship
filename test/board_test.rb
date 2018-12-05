@@ -89,22 +89,38 @@ class BoardTest < Minitest::Test
   def test_board_can_render
 
     board = Board.new
-    assert_equal "  1 2 3 4 \n" \
-                 "A . . . . \n" \
-                 "B . . . . \n" \
-                 "C . . . . \n" \
-                 "D . . . . \n", board.render
+    assert_equal "  1 2 3 4 \nA  . . . . \nB  . . . . \nC  . . . . \nD  . . . . \n", board.render
   end
 
   def test_board_can_render_optional_true
-
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     board.place(cruiser, ['A1', 'A2', 'A3'])
-    assert_equal "  1 2 3 4 \n" \
-                 "A S S S . \n" \
-                 "B . . . . \n" \
-                 "C . . . . \n" \
-                 "D . . . . \n", board.render(true)
+    assert_equal "  1 2 3 4 \nA  S S S . \nB  . . . . \nC  . . . . \nD  . . . . \n", board.render(true)
   end
+
+  def test_board_can_render_with_hits
+    board = Board.new
+    cruiser = Ship.new('Cruiser', 3)
+    board.place(cruiser, ['A1', 'A2', 'A3'])
+    board.cells["A3"].fire_upon
+    assert_equal "  1 2 3 4 \nA  . . H . \nB  . . . . \nC  . . . . \nD  . . . . \n", board.render
+  end
+
+  def test_board_can_render_with_misses
+    board = Board.new
+    board.cells["A3"].fire_upon
+    assert_equal "  1 2 3 4 \nA  . . M . \nB  . . . . \nC  . . . . \nD  . . . . \n", board.render
+  end
+
+  def test_board_can_render_a_sunken_ship
+    board = Board.new
+    submarine = Ship.new("Submarine", 2)
+    board.place(submarine, ['A2', 'A3'])
+    board.cells['A2'].fire_upon
+    board.cells['A3'].fire_upon
+    assert_equal "  1 2 3 4 \nA  . X X . \nB  . . . . \nC  . . . . \nD  . . . . \n", board.render
+  end
+
+  
 end
