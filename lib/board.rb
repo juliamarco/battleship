@@ -2,11 +2,8 @@ require './lib/cell'
 require './lib/ship'
 require 'pry'
 
-
 class Board
-
   attr_reader :cells
-
   def initialize
     @cells = {}
     @valid_coordinates = []
@@ -15,47 +12,64 @@ class Board
   end
 
   def create_cells
-    ("A".."D").each do |letter|
-      ("1".."4").each do |number|
+    ('A'..'D').each do |letter|
+      ('1'..'4').each do |number|
         coordinate = "#{letter}#{number}"
         @cells[coordinate] = Cell.new(coordinate)
       end
     end
   end
 
-
   def valid_coordinate?(coordinate)
-    ("A".."D").map do |letter|
-      ("1".."4").map do |number|
+    ('A'..'D').map do |letter|
+      ('1'..'4').map do |number|
         each_coordinate = "#{letter}#{number}"
         @valid_coordinates << each_coordinate
       end
     end
     @valid_coordinates.include?(coordinate)
-
   end
 
   def valid_placement?(ship, coordinates)
     if ship.length != coordinates.length
       false
     elsif valid_coordinate?(coordinates)
+    elsif coordinates.any? do |coordinate|
+      @cells[coordinate].ship != nil
+    end
+      false
     else
       coordinate_pairs = []
       coordinates.each_cons(2).each do |pair|
         coordinate_pairs << pair
       end
-        coordinate_pairs.all? do |pair|
-          letter_shift = pair[1][0].ord - pair[0][0].ord
-          number_shift = pair[1][1].ord - pair[0][1].ord
-          letter_shift + number_shift == 1
-          end
-        end
-      end
-
-    def place(ship, coordinates)
-      coordinates.each do |coordinate|
-      @cells[coordinate].ship = ship
+      coordinate_pairs.all? do |pair|
+        letter_shift = pair[1][0].ord - pair[0][0].ord
+        number_shift = pair[1][1].ord - pair[0][1].ord
+        letter_shift + number_shift == 1
       end
     end
+  end
 
+  def place(ship, coordinates)
+    coordinates.each do |coordinate|
+      @cells[coordinate].ship = ship
+    end
+  end
+
+  def render(show_ships = false)
+    cell_display = []
+    @cells.values.each do |cell|
+      if show_ships == true
+        cell_display << cell.render(true)
+      else
+        cell_display << cell.render
+      end
+    end
+    p cell_display
+  end
 end
+# board = Board.new
+# cruiser = Ship.new('Cruiser', 3)
+# board.place(cruiser, ['A1', 'A2', 'A3'])
+# board.render(true)
