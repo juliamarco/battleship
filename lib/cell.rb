@@ -1,6 +1,7 @@
 class Cell
-  attr_reader :coordinate,
-              :ship
+  attr_reader   :coordinate
+  attr_accessor :ship
+
   def initialize(coordinate)
     @coordinate = coordinate
     @ship = nil
@@ -27,7 +28,7 @@ class Cell
   end
 
   def render(own_ship = false)
-    if own_ship == true
+    if own_ship == true && @fired_upon == false && @ship.nil? == false
       'S'
     elsif @fired_upon == false
       '.'
