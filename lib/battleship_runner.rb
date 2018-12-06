@@ -60,14 +60,16 @@ class BattleshipRunner
   end
 
   def computer_setup
-    ayer_cruiser = Ship.new("Cruiser", 3)
-    player_submarine = Ship.new("Submarine", 2)
-    player_board = Board.new
-
+    computer_cruiser = Ship.new("Cruiser", 3)
+    computer_submarine = Ship.new("Submarine", 2)
+    computer_board = Board.new
+    valid_cruiser_placement = [['A1', 'A2', 'A3'], ['A2', 'A3', 'A4'], ['B1', 'B2', 'B3'], ['B2', 'B3', 'B4'], ['C1', 'C2', 'C3'], ['C2', 'C3', 'C4'], ['D1', 'D2', 'D3'], ['D2', 'D3', 'D4'], ['A1', 'B1', 'C1'], ['C1', 'B1', 'D1'], ['A2', 'B2', 'C2'], ['B2', 'C2', 'D2'], ['A3', 'B3', 'C3'], ['B3', 'C3', 'D3'], ['A4', 'B4', 'C4'], ['B4', 'C4', 'D4']]
+    computer_board.place(computer_cruiser, valid_cruiser_placement.sample)
+    puts computer_board.render(true)
   end
 
 
 end
 
 runner = BattleshipRunner.new
-runner.player_setup
+runner.computer_setup
