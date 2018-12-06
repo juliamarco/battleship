@@ -15,8 +15,10 @@ class BattleshipRunner
         input = gets.chomp.upcase
           if input  == "Q"
             return
-          else input == "P"
+          elsif input == "P"
             setup
+          else
+            next
           end
         end
   end
@@ -64,7 +66,17 @@ class BattleshipRunner
     computer_submarine = Ship.new("Submarine", 2)
     computer_board = Board.new
     valid_cruiser_placement = [['A1', 'A2', 'A3'], ['A2', 'A3', 'A4'], ['B1', 'B2', 'B3'], ['B2', 'B3', 'B4'], ['C1', 'C2', 'C3'], ['C2', 'C3', 'C4'], ['D1', 'D2', 'D3'], ['D2', 'D3', 'D4'], ['A1', 'B1', 'C1'], ['C1', 'B1', 'D1'], ['A2', 'B2', 'C2'], ['B2', 'C2', 'D2'], ['A3', 'B3', 'C3'], ['B3', 'C3', 'D3'], ['A4', 'B4', 'C4'], ['B4', 'C4', 'D4']]
-    computer_board.place(computer_cruiser, valid_cruiser_placement.sample)
+    random_cruiser_coordinate = valid_cruiser_placement.sample
+    computer_board.place(computer_cruiser, random_cruiser_coordinate)
+    puts computer_board.render(true)
+    valid_submarine_placement = [['A1', 'A2'], ['A2', 'A3'], ['A3', 'A4'], ['B1', 'B2'], ['B2', 'B3'], ['B3', 'B4'], ['C1', 'C2'], ['C2', 'C3'], ['C3', 'C4'], ['D1', 'D2'], ['D2', 'D3'], ['D3', 'D4'], ['A1', 'B1'], ['B1', 'C1'], ['C1', 'D1'], ['A2', 'B2'], ['B2', 'C2'], ['C2', 'D2'], ['A3', 'B3'], ['B3', 'C3'], ['C3', 'D3'], ['A4', 'B4'], ['B4', 'C4'], ['C4', 'D4']]
+    loop do
+      random_submarine_coordinate = valid_submarine_placement.sample
+      if computer_board.valid_placement?(computer_submarine, random_submarine_coordinate)
+        computer_board.place(computer_submarine, random_submarine_coordinate)
+        break
+      end
+    end
     puts computer_board.render(true)
   end
 
@@ -72,4 +84,4 @@ class BattleshipRunner
 end
 
 runner = BattleshipRunner.new
-runner.computer_setup
+runner.main_menu
