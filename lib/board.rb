@@ -83,7 +83,3 @@ class Board
 
 
 end
-board = Board.new
-cruiser = Ship.new('Cruiser', 3)
-board.place(cruiser, ['A1', 'A2', 'A3'])
-p board.render(true)
