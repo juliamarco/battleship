@@ -1,7 +1,3 @@
-require './lib/cell'
-require './lib/ship'
-require 'pry'
-
 class Board
   attr_reader :cells
   def initialize
@@ -21,14 +17,20 @@ class Board
   end
 
   def valid_coordinate?(coordinate)
-    ('A'..'D').map do |letter|
-      ('1'..'4').map do |number|
-        each_coordinate = "#{letter}#{number}"
-        @valid_coordinates << each_coordinate
-      end
-    end
-    @valid_coordinates.include?(coordinate)
+    @cells.keys.include?(coordinate)
   end
+
+
+    #  def valid_coordinate?(coordinate)
+    # ('A'..'D').map do |letter|
+    #   ('1'..'4').map do |number|
+    #     each_coordinate = "#{letter}#{number}"
+    #     @valid_coordinates << each_coordinate
+    #   end
+    # end
+    # p @valid_coordinates
+  #   # @valid_coordinates.include?(coordinate)
+  # end
 
   def valid_placement?(ship, coordinates)
     if ship.length != coordinates.length
