@@ -42,7 +42,7 @@ class BattleshipRunner
         end
       end
     end
-        turn = Turn.new(player_shot, computer_shot)
+        # turn = Turn.new(player_shot, computer_shot)
 
 
 

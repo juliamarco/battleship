@@ -52,7 +52,9 @@ class Board
 
   def ships_cannot_overlap(coordinates)
       coordinates.all? do |coordinate|
-        @cells[coordinate].empty?
+        if @cells.has_key?(coordinate)
+          @cells[coordinate].empty?
+        end
       end
   end
 
