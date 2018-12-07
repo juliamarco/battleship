@@ -17,6 +17,7 @@ class BattleshipRunner
             return
           elsif input == "P"
             setup
+            begin_game
           else
             next
           end
@@ -24,9 +25,28 @@ class BattleshipRunner
   end
 
   def setup
-    player_setup
     computer_setup
+    player_setup
   end
+
+  def begin_game
+    until player_cruiser.health + player_submarine.health == 0 || computer_cruiser.health + computer_submarine.health == 0
+      puts "Enter the coordinate for your shot"
+      player_shot = gets.chomp
+      loop do
+        computer_shot = player_board.cells.keys.sample
+          if player_board.cells[computer_shot].fired_upon?
+            next
+          else break
+          end
+        end
+      end
+    end
+        turn = Turn.new(player_shot, computer_shot)
+
+
+
+
 
   def player_setup
     player_cruiser = Ship.new("Cruiser", 3)
@@ -77,7 +97,6 @@ class BattleshipRunner
         break
       end
     end
-    puts computer_board.render(true)
   end
 
 
