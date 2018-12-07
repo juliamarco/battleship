@@ -29,8 +29,8 @@ class BoardTest < Minitest::Test
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     submarine = Ship.new('Submarine', 2)
-    assert_equal true, board.valid_placement?(submarine, ['A1', 'A2'])
-    assert_equal false, board.valid_placement?(cruiser, ['A1', 'A2'])
+    assert_equal true, board.number_of_ordinates_equals_length(submarine, ['A1', 'A2'])
+    assert_equal false, board.number_of_ordinates_equals_length(cruiser, ['A1', 'A2'])
   end
 
   def test_coordinates_are_consecutive
@@ -50,6 +50,7 @@ class BoardTest < Minitest::Test
   end
 
   def test_placement_is_valid
+
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     submarine = Ship.new('Submarine', 2)
@@ -93,6 +94,7 @@ class BoardTest < Minitest::Test
   end
 
   def test_board_can_render_optional_true
+
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     board.place(cruiser, ['A1', 'A2', 'A3'])
@@ -100,6 +102,7 @@ class BoardTest < Minitest::Test
   end
 
   def test_board_can_render_with_hits
+
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     board.place(cruiser, ['A1', 'A2', 'A3'])
@@ -108,12 +111,14 @@ class BoardTest < Minitest::Test
   end
 
   def test_board_can_render_with_misses
+
     board = Board.new
     board.cells["A3"].fire_upon
     assert_equal "  1 2 3 4 \nA  . . M . \nB  . . . . \nC  . . . . \nD  . . . . \n", board.render
   end
 
   def test_board_can_render_a_sunken_ship
+
     board = Board.new
     submarine = Ship.new("Submarine", 2)
     board.place(submarine, ['A2', 'A3'])
@@ -122,5 +127,5 @@ class BoardTest < Minitest::Test
     assert_equal "  1 2 3 4 \nA  . X X . \nB  . . . . \nC  . . . . \nD  . . . . \n", board.render
   end
 
-  
+
 end

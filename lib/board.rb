@@ -1,12 +1,13 @@
+require 'pry'
 require './lib/cell'
 require './lib/ship'
-require 'pry'
+
 
 class Board
   attr_reader :cells
   def initialize
     @cells = {}
-    @valid_coordinates = []
+
 
     create_cells
   end
@@ -20,43 +21,72 @@ class Board
     end
   end
 
-  def valid_coordinate?(coordinate)
-    ('A'..'D').map do |letter|
-      ('1'..'4').map do |number|
-        each_coordinate = "#{letter}#{number}"
-        @valid_coordinates << each_coordinate
-      end
+  def valid_coordinates?(coordinates)
+    coordinates.all? do |coordinate|
+      @cells.keys.include?(coordinate)
     end
-    @valid_coordinates.include?(coordinate)
   end
 
+  def valid_coordinate?(coordinate)
+      @cells.keys.include?(coordinate)
+  end
+
+
   def valid_placement?(ship, coordinates)
-    if ship.length != coordinates.length
-      false
-    elsif valid_coordinate?(coordinates)
-    elsif coordinates.any? do |coordinate|
-      @cells[coordinate].ship != nil
-    end
-      false
+    all_values = []
+    all_values << number_of_ordinates_equals_length(ship, coordinates)
+    all_values << valid_coordinates?(coordinates)
+    all_values << ships_cannot_overlap(coordinates)
+    all_values << compare_ordinates(coordinates)
+    all_values << coordinates_are_consecutive(coordinates)
+    if all_values.include?(false)
+      return false
     else
-      letter_ordinates = []
-      number_ordinates = []
-      coordinate_pairs = []
-      coordinates.each_cons(2).each do |pair|
-        coordinate_pairs << pair
+      return true
+    end
+  end
+
+  def number_of_ordinates_equals_length(ship, coordinates)
+   ship.length == coordinates.length
+  end
+
+  def ships_cannot_overlap(coordinates)
+      coordinates.all? do |coordinate|
+        @cells[coordinate].empty?
       end
-      coordinate_pairs.flatten.each do |coordinate|
-        letter_ordinates << coordinate[0].ord
-        number_ordinates << coordinate[1].ord
+  end
+
+  def all_coordinate_pairs(coordinates)
+      coordinate_pairs = coordinates.each_cons(2).map do |pair|
+        pair
       end
-      if letter_ordinates.uniq.length > 1 && number_ordinates.uniq.length > 1
-         return false
+  end
+
+  def all_letter_ordinates(coordinates)
+      letter_ordinates = all_coordinate_pairs(coordinates).flatten.map do |coordinate|
+      coordinate[0].ord
       end
-      coordinate_pairs.all? do |pair|
-        vertical_shift = pair[1][0].ord - pair[0][0].ord
-        horizontal_shift = pair[1][1].ord - pair[0][1].ord
-        vertical_shift + horizontal_shift == 1
+  end
+
+  def all_number_ordinates(coordinates)
+      number_ordinates = all_coordinate_pairs(coordinates).flatten.map do |coordinate|
+      coordinate[1].ord
       end
+  end
+
+  def compare_ordinates(coordinates)
+    if all_letter_ordinates(coordinates).uniq.length > 1 && all_number_ordinates(coordinates).uniq.length > 1
+      return false
+    else
+      return true
+    end
+  end
+
+  def coordinates_are_consecutive(coordinates)
+    all_coordinate_pairs(coordinates).all? do |pair|
+      letter_shift = all_letter_ordinates(pair)[1] - all_letter_ordinates(pair)[0]
+      number_shift =all_number_ordinates(pair)[1] - all_number_ordinates(pair)[0]
+      letter_shift + number_shift == 1
     end
   end
 
@@ -83,7 +113,3 @@ class Board
 
 
 end
-board = Board.new
-cruiser = Ship.new('Cruiser', 3)
-board.place(cruiser, ['A1', 'A2', 'A3'])
-p board.render(true)
