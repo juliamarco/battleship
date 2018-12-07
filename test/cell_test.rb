@@ -87,10 +87,14 @@ class CellTest < Minitest::Test
   end
 
   def test_cell_renders_x_if_ship_sunk
-    cell = Cell.new('B4')
-    cruiser = Ship.new('Cruiser', 1)
-    cell.place_ship(cruiser)
-    cell.fire_upon
-    assert_equal 'X', cell.render
+    cell_1 = Cell.new('B4')
+    cell_2 = Cell.new('B3')
+    cruiser = Ship.new('Cruiser', 2)
+    cell_1.place_ship(cruiser)
+    cell_2.place_ship(cruiser)
+    cell_1.fire_upon
+    cell_2.fire_upon
+    assert_equal 'X', cell_1.render
+    assert_equal 'X', cell_2.render
   end
 end
