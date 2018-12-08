@@ -12,8 +12,11 @@ class Turn
   end
 
   def display_boards
-    puts @computer_board.render
-    puts @player_board.render(true)
+    boards = "=============COMPUTER BOARD=============\n" +
+    @computer_board.render +
+    "==============PLAYER BOARD==============\n" +
+    @player_board.render(true)
+    return boards
   end
 
   def player_select_coordinates
@@ -25,7 +28,7 @@ class Turn
       elsif @computer_board.cells[player_coordinate].fired_upon? == true
         puts 'You have already fired upon that coordinate, pick another'
       elsif @computer_board.valid_coordinate?(player_coordinate)
-        fire_player_shot(player_coordinate)
+        player_fire_shot(player_coordinate)
         break
       end
     end
@@ -37,26 +40,22 @@ class Turn
       if @player_board.cells[computer_coordinate].fired_upon? == true
         next
       else
-        fire_computer_shot(computer_coordinate)
+        computer_fire_shot(computer_coordinate)
 
         break
       end
     end
   end
 
-  def fire_player_shot(player_coordinate)
+  def player_fire_shot(player_coordinate)
     @computer_board.cells[player_coordinate].fire_upon
   end
 
-  def fire_computer_shot(computer_coordinate)
+  def computer_fire_shot(computer_coordinate)
     @player_board.cells[computer_coordinate].fire_upon
   end
 
 
-  def display_turn_results
-    puts @computer_board.render
-    puts @player_board.render(true)
-  end
 
   def end_game
     if player_cruiser.health + player_submarine.health == 0 || computer_cruiser.health + computer_submarine.health == 0
