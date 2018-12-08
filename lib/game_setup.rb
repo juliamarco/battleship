@@ -5,8 +5,6 @@ require 'pry'
 
 class GameSetup
   def initialize(turn)
-    @player_board = nil
-    @computer_board = nil
     @turn = turn
   end
 
@@ -18,6 +16,7 @@ class GameSetup
           if input  == "Q"
             return
           elsif input == "P"
+            clear_board
             setup
             @turn.begin_game
           else
@@ -33,7 +32,6 @@ class GameSetup
   end
 
   def player_setup
-    player_board = Board.new
     player_cruiser = Ship.new('cruiser', 3)
     player_submarine = Ship.new('submarine', 2)
     puts "I have laid out my ships on the grid."
@@ -43,45 +41,53 @@ class GameSetup
 
     loop do
       puts "Enter the three squares for the Cruiser separated by spaces (e.g. A1 A2 A3)"
-      player_cruiser_coordinates = gets.chomp.split
-      if player_board.valid_placement?(player_cruiser, player_cruiser_coordinates)
-        player_board.place(player_cruiser, player_cruiser_coordinates)
+      player_cruiser_coordinates = gets.chomp.upcase.split
+      if @turn.player_board.valid_placement?(player_cruiser, player_cruiser_coordinates)
+        @turn.player_board.place(player_cruiser, player_cruiser_coordinates)
         break
       else
         puts "Those coordinates are invalid"
       end
     end
-    puts player_board.render(true)
+    puts @turn.player_board.render(true)
     loop do
       puts "Enter the two squares for the Submarine separated by spaces (e.g. A1 A2)"
-      player_submarine_coordinates = gets.chomp.split
-      if player_board.valid_placement?(player_submarine, player_submarine_coordinates)
-        player_board.place(player_submarine, player_submarine_coordinates)
+      player_submarine_coordinates = gets.chomp.upcase.split
+      if @turn.player_board.valid_placement?(player_submarine, player_submarine_coordinates)
+        @turn.player_board.place(player_submarine, player_submarine_coordinates)
       break
       else
       puts "Those coordinates are invalid"
       end
     end
-    puts player_board.render(true)
-    @player_board = player_board
+    puts @turn.player_board.render(true)
   end
 
   def computer_setup
-    computer_board = Board.new
     computer_cruiser = Ship.new('cruiser', 3)
     computer_submarine = Ship.new('submarine', 2)
     valid_cruiser_placement = [['A1', 'A2', 'A3'], ['A2', 'A3', 'A4'], ['B1', 'B2', 'B3'], ['B2', 'B3', 'B4'], ['C1', 'C2', 'C3'], ['C2', 'C3', 'C4'], ['D1', 'D2', 'D3'], ['D2', 'D3', 'D4'], ['A1', 'B1', 'C1'], ['C1', 'B1', 'D1'], ['A2', 'B2', 'C2'], ['B2', 'C2', 'D2'], ['A3', 'B3', 'C3'], ['B3', 'C3', 'D3'], ['A4', 'B4', 'C4'], ['B4', 'C4', 'D4']]
     random_cruiser_coordinate = valid_cruiser_placement.sample
-    computer_board.place(computer_cruiser, random_cruiser_coordinate)
-    puts computer_board.render(true)
+    @turn.computer_board.place(computer_cruiser, random_cruiser_coordinate)
+    puts @turn.computer_board.render(true)
     valid_submarine_placement = [['A1', 'A2'], ['A2', 'A3'], ['A3', 'A4'], ['B1', 'B2'], ['B2', 'B3'], ['B3', 'B4'], ['C1', 'C2'], ['C2', 'C3'], ['C3', 'C4'], ['D1', 'D2'], ['D2', 'D3'], ['D3', 'D4'], ['A1', 'B1'], ['B1', 'C1'], ['C1', 'D1'], ['A2', 'B2'], ['B2', 'C2'], ['C2', 'D2'], ['A3', 'B3'], ['B3', 'C3'], ['C3', 'D3'], ['A4', 'B4'], ['B4', 'C4'], ['C4', 'D4']]
     loop do
       random_submarine_coordinate = valid_submarine_placement.sample
-      if computer_board.valid_placement?(computer_submarine, random_submarine_coordinate)
-        computer_board.place(computer_submarine, random_submarine_coordinate)
+      if @turn.computer_board.valid_placement?(computer_submarine, random_submarine_coordinate)
+        @turn.computer_board.place(computer_submarine, random_submarine_coordinate)
         break
       end
     end
-    @computer_board = computer_board
   end
+
+  def clear_board
+   @turn.player_board.cells.values.each do |cell|
+     cell.ship = nil
+     cell.fired_upon = false
+   end
+   @turn.computer_board.cells.values.each do |cell|
+     cell.ship = nil
+     cell.fired_upon = false
+   end
+ end
 end

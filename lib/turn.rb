@@ -5,8 +5,10 @@ require 'pry'
 
 class Turn
 
-    attr_accessor :computer_coordinate, #for testing computer results
-                  :player_coordinate    #for testing player results
+    attr_accessor :computer_coordinate,
+                  :player_coordinate
+    attr_reader :player_board,
+                :computer_board
 
   def initialize(player_board, computer_board)
     @player_board = player_board
@@ -18,11 +20,18 @@ class Turn
 
   def begin_game
     loop do
-      display_boards
+      puts display_boards
       player_select_coordinates
       computer_select_coordinates
-      report_player_results
-      report_computer_results
+      p report_player_results
+      p report_computer_results
+      if player_wins_game
+        puts "You win!"
+        break
+      elsif computer_wins_game
+        puts "You lose."
+      else next
+      end
     end
   end
 
@@ -61,7 +70,6 @@ class Turn
         next
       else
         computer_fire_shot(computer_coordinate)
-
         break
       end
     end
@@ -95,8 +103,25 @@ class Turn
     end
   end
 
-  # def end_game
-  #   if player_cruiser.health + player_submarine.health == 0 || computer_cruiser.health + computer_submarine.health == 0
-  #   end
-  # end
+  def player_wins_game
+    cells_with_ship = @computer_board.cells.values.map do |cell|
+      if cell.empty?
+      else cell.ship.health
+      end
+    end
+    cells_with_ship.compact!.all? do |health|
+      health == 0
+    end
+  end
+
+  def computer_wins_game
+    cells_with_ship = @player_board.cells.values.map do |cell|
+      if cell.empty?
+      else cell.ship.health
+      end
+    end
+    cells_with_ship.compact!.all? do |health|
+      health == 0
+    end
+  end
 end
