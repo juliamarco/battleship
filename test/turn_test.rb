@@ -26,7 +26,6 @@ class TurnTest < Minitest::Test
   end
 
 
-
   def test_player_fires_shots
     player_board = Board.new
     computer_board = Board.new
@@ -45,13 +44,44 @@ class TurnTest < Minitest::Test
 
     assert_equal true, player_board.cells['A1'].fired_upon?
   end
-#
-# test_it_can_report_the_results
-#
-# assert_equal, turn.report_results
-# end
-#
-#
+
+  def test_it_can_report_the_computer_results
+    player_board = Board.new
+    computer_board = Board.new
+    turn = Turn.new(player_board, computer_board)
+    turn.computer_fire_shot("A1")
+    turn.computer_coordinate = 'A1'
+    submarine = Ship.new('Submarine', 2)
+    player_board.place(submarine, ['A2','A3'])
+    turn.computer_fire_shot('A2')
+
+    assert_equal 'My shot on A1 was a miss.', turn.report_computer_results
+    turn.computer_coordinate = 'A2'
+    assert_equal 'My shot on A2 was a hit.', turn.report_computer_results
+    turn.computer_coordinate = 'A3'
+    turn.computer_fire_shot('A3')
+    assert_equal 'My shot on A3 sunk your ship.', turn.report_computer_results
+  end
+
+  def test_it_can_report_the_player_results
+    player_board = Board.new
+    computer_board = Board.new
+    submarine = Ship.new('Submarine', 2)
+    computer_board.place(submarine, ['A1', 'A2'])
+    turn = Turn.new(player_board, computer_board)
+    turn.player_fire_shot("A1")
+    turn.player_coordinate = 'A1'
+
+    assert_equal 'My shot on A1 was a hit.', turn.report_player_results
+    turn.player_coordinate = 'B2'
+    turn.player_fire_shot('B2')
+    assert_equal 'My shot on B2 was a miss.', turn.report_player_results
+    turn.player_coordinate = 'A2'
+    turn.player_fire_shot('A2')
+    assert_equal 'My shot on A2 sunk your ship.', turn.report_player_results
+  end
+
+
 # if coordinate.valid_coordinate?(coordinate)
 
 end
