@@ -81,7 +81,4 @@ class TurnTest < Minitest::Test
     assert_equal 'My shot on A2 sunk your ship.', turn.report_player_results
   end
 
-
-# if coordinate.valid_coordinate?(coordinate)
-
 end

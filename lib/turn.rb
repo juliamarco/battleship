@@ -1,4 +1,3 @@
-require './lib/battleship_runner'
 require './lib/board'
 require './lib/cell'
 require './lib/ship'
@@ -16,6 +15,17 @@ class Turn
     @computer_coordinate = nil
   end
 
+
+  def begin_game
+    loop do
+      display_boards
+      player_select_coordinates
+      computer_select_coordinates
+      report_player_results
+      report_computer_results
+    end
+  end
+
   def display_boards
     boards = "=============COMPUTER BOARD=============\n" +
     @computer_board.render +
@@ -30,6 +40,9 @@ class Turn
       player_coordinate = gets.chomp.upcase
       @player_coordinate = player_coordinate
       if @computer_board.cells[player_coordinate] == nil
+
+        # if coordinate.valid_coordinate?(coordinate)
+
         puts 'That is an invalid coordinate, pick another'
       elsif @computer_board.cells[player_coordinate].fired_upon? == true
         puts 'You have already fired upon that coordinate, pick another'
@@ -82,8 +95,8 @@ class Turn
     end
   end
 
-  def end_game
-    if player_cruiser.health + player_submarine.health == 0 || computer_cruiser.health + computer_submarine.health == 0
-    end
-  end
+  # def end_game
+  #   if player_cruiser.health + player_submarine.health == 0 || computer_cruiser.health + computer_submarine.health == 0
+  #   end
+  # end
 end

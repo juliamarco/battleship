@@ -1,13 +1,13 @@
 require './lib/board'
 require './lib/cell'
 require './lib/ship'
-require './lib/turn'
 require 'pry'
 
 class GameSetup
-  def initialize
+  def initialize(turn)
     @player_board = nil
     @computer_board = nil
+    @turn = turn
   end
 
   def main_menu
@@ -19,24 +19,13 @@ class GameSetup
             return
           elsif input == "P"
             setup
-            begin_game
+            @turn.begin_game
           else
             next
           end
     end
   end
 
-  def begin_game
-    turn = Turn.new(@player_board, @computer_board)
-    turn.display_boards
-    loop do
-      turn.player_select_coordinates
-      turn.computer_select_coordinates
-      turn.display_turn_results
-      # turn.display_player_turn_results
-      # turn.display_computer_turn_results
-    end
-  end
 
   def setup
     computer_setup
@@ -96,6 +85,3 @@ class GameSetup
     @computer_board = computer_board
   end
 end
-
-game_setup = GameSetup.new
-game_setup.main_menu

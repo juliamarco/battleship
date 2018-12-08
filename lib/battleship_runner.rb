@@ -1,25 +1,23 @@
-=begin
-Go to main menu
-player chooses if they want to play
-  if no quit
-  if yes setup game
-run computer setup
-run player setup
+require './lib/ship'
+require './lib/board'
+require './lib/cell'
+require './lib/game_setup'
+require './lib/turn'
+require 'pry'
 
-TURN CLASS
-display boards
-begin turn
-enter loop until one player loses
-  choose coordinates
-  fire on coordinates
-  return results
+
+
+=begin
+
 end game
 game reports who won
 return to main menu
 
-
-
-
-
-
 =end
+
+player_board = Board.new
+computer_board = Board.new
+binding.pry
+turn = Turn.new(player_board, computer_board)
+game = GameSetup.new(turn)
+game.main_menu
