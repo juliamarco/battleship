@@ -9,8 +9,6 @@ class Turn
   def initialize(player_board, computer_board)
     @player_board = player_board
     @computer_board = computer_board
-    @player_shot = nil
-    @computer_shot = nil
   end
 
   def display_boards
@@ -21,15 +19,13 @@ class Turn
   def player_select_coordinates
     puts 'Enter the coordinate for your shot.'
     loop do
-      puts @computer_board.render
-      player_shot = gets.chomp
-      if @computer_board.cells[player_shot] == nil
+      player_coordinate = gets.chomp.upcase
+      if @computer_board.cells[player_coordinate] == nil
         puts 'That is an invalid coordinate, pick another'
-        next
-      elsif @computer_board.cells[player_shot].fired_upon? == true
+      elsif @computer_board.cells[player_coordinate].fired_upon? == true
         puts 'You have already fired upon that coordinate, pick another'
-      elsif @computer_board.valid_coordinate?(player_shot)
-        @computer_board.cells[player_shot].fire_upon
+      elsif @computer_board.valid_coordinate?(player_coordinate)
+        fire_player_shot(player_coordinate)
         break
       end
     end
@@ -37,32 +33,29 @@ class Turn
 
   def computer_select_coordinates
     loop do
-      computer_shot = @player_board.cells.keys.sample
-      if @player_board.cells[computer_shot].fired_upon? == true
+      computer_coordinate = @player_board.cells.keys.sample
+      if @player_board.cells[computer_coordinate].fired_upon? == true
         next
       else
-        @player_board.cells[computer_shot].fire_upon
-        puts @player_board.render(true)
+        fire_computer_shot(computer_coordinate)
+
         break
       end
     end
   end
 
-  def fire_shots
-    @player_board.cells[@computer_shot].fire_upon
-    @computer_board.cells[@player_shot].fire_upon
+  def fire_player_shot(player_coordinate)
+    @computer_board.cells[player_coordinate].fire_upon
   end
 
-  def display_player_turn_results
-    computer_shot_result = @player_board.cells[@computer_shot].render
-    player_shot_result = @computer_board.cells[@player_shot].render
-    if computer_shot == 'M'
-      puts "The computer's shot on #{@computer_shot} missed."
-    elsif computer_shot == 'H'
-      puts "The computer's shot on #{@computer_shot} was a hit."
-    elsif computer_shot == 'X'
-      puts "The computer's shot on #{@computer_shot} sunk your ship."
-    end
+  def fire_computer_shot(computer_coordinate)
+    @player_board.cells[computer_coordinate].fire_upon
+  end
+
+
+  def display_turn_results
+    puts @computer_board.render
+    puts @player_board.render(true)
   end
 
   def end_game

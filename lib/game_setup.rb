@@ -32,6 +32,7 @@ class GameSetup
     loop do
       turn.player_select_coordinates
       turn.computer_select_coordinates
+      turn.display_turn_results
       # turn.display_player_turn_results
       # turn.display_computer_turn_results
     end
