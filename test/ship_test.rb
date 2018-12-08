@@ -1,5 +1,7 @@
 require 'minitest/autorun'
 require './lib/ship'
+require 'minitest/pride'
+
 
 class ShipTest < Minitest::Test
   def test_it_exists
