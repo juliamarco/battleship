@@ -100,7 +100,7 @@ class Board
 
   def render(show_ships = false)
     cell_display = []
-    empty_display = ["  1 2 3 4 \nA ", "\nB ", "\nC ", "\nD ", "\n"]
+    empty_display = ["   1 2 3 4 \nA ", "\nB ", "\nC ", "\nD ", "\n"]
     @cells.values.each do |cell|
       if show_ships == true
         cell_display << cell.render(true)
