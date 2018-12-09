@@ -72,13 +72,13 @@ class TurnTest < Minitest::Test
     turn.player_fire_shot("A1")
     turn.player_coordinate = 'A1'
 
-    assert_equal 'My shot on A1 was a hit.', turn.report_player_results
+    assert_equal 'Your shot on A1 was a hit.', turn.report_player_results
     turn.player_coordinate = 'B2'
     turn.player_fire_shot('B2')
-    assert_equal 'My shot on B2 was a miss.', turn.report_player_results
+    assert_equal 'Your shot on B2 was a miss.', turn.report_player_results
     turn.player_coordinate = 'A2'
     turn.player_fire_shot('A2')
-    assert_equal 'My shot on A2 sunk your ship.', turn.report_player_results
+    assert_equal 'Your shot on A2 sunk my ship.', turn.report_player_results
   end
 
 end
