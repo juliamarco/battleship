@@ -25,7 +25,6 @@ class GameSetup
     end
   end
 
-
   def setup
     computer_setup
     player_setup
@@ -36,8 +35,8 @@ class GameSetup
     player_submarine = Ship.new('submarine', 2)
     puts "I have laid out my ships on the grid."
     puts "You now need to lay out your two ships."
-    puts "The Cruiser is two units long and the Submarine is three units long."
-    puts "  1 2 3 4 \nA  . . . . \nB  . . . . \nC  . . . . \nD  . . . . \n"
+    puts "The Cruiser is three units long and the Submarine is two units long."
+    puts "=============PLAYER BOARD=============\n" + "  1 2 3 4 \nA  . . . . \nB  . . . . \nC  . . . . \nD  . . . . \n"
 
     loop do
       puts "Enter the three squares for the Cruiser separated by spaces (e.g. A1 A2 A3)"
@@ -69,7 +68,7 @@ class GameSetup
     valid_cruiser_placement = [['A1', 'A2', 'A3'], ['A2', 'A3', 'A4'], ['B1', 'B2', 'B3'], ['B2', 'B3', 'B4'], ['C1', 'C2', 'C3'], ['C2', 'C3', 'C4'], ['D1', 'D2', 'D3'], ['D2', 'D3', 'D4'], ['A1', 'B1', 'C1'], ['C1', 'B1', 'D1'], ['A2', 'B2', 'C2'], ['B2', 'C2', 'D2'], ['A3', 'B3', 'C3'], ['B3', 'C3', 'D3'], ['A4', 'B4', 'C4'], ['B4', 'C4', 'D4']]
     random_cruiser_coordinate = valid_cruiser_placement.sample
     @turn.computer_board.place(computer_cruiser, random_cruiser_coordinate)
-    puts @turn.computer_board.render(true)
+    @turn.computer_board.render(false)
     valid_submarine_placement = [['A1', 'A2'], ['A2', 'A3'], ['A3', 'A4'], ['B1', 'B2'], ['B2', 'B3'], ['B3', 'B4'], ['C1', 'C2'], ['C2', 'C3'], ['C3', 'C4'], ['D1', 'D2'], ['D2', 'D3'], ['D3', 'D4'], ['A1', 'B1'], ['B1', 'C1'], ['C1', 'D1'], ['A2', 'B2'], ['B2', 'C2'], ['C2', 'D2'], ['A3', 'B3'], ['B3', 'C3'], ['C3', 'D3'], ['A4', 'B4'], ['B4', 'C4'], ['C4', 'D4']]
     loop do
       random_submarine_coordinate = valid_submarine_placement.sample

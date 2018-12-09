@@ -30,6 +30,7 @@ class Turn
         break
       elsif computer_wins_game
         puts "You lose."
+        break
       else next
       end
     end
@@ -95,11 +96,11 @@ class Turn
 
   def report_player_results
     if @computer_board.cells[@player_coordinate].render == 'M'
-      "My shot on #{@player_coordinate} was a miss."
+      "Your shot on #{@player_coordinate} was a miss."
     elsif @computer_board.cells[@player_coordinate].render == 'H'
-      "My shot on #{@player_coordinate} was a hit."
+      "Your shot on #{@player_coordinate} was a hit."
     elsif @computer_board.cells[@player_coordinate].render == 'X'
-      "My shot on #{@player_coordinate} sunk your ship."
+      "Your shot on #{@player_coordinate} sunk my ship."
     end
   end
 
