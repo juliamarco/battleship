@@ -20,7 +20,7 @@ class TurnTest < Minitest::Test
     player_board.place(cruiser, ['A1', 'A2', 'A3'])
     computer_board.place(submarine, ['A1','A2'])
     turn = Turn.new(player_board, computer_board)
-    boards = "=============COMPUTER BOARD=============\n   1 2 3 4 \nA  . . . . \nB  . . . . \nC  . . . . \nD  . . . . \n==============PLAYER BOARD==============\n   1 2 3 4 \nA  S S S . \nB  . . . . \nC  . . . . \nD  . . . . \n"
+    boards = "=============COMPUTER BOARD=============\n  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n==============PLAYER BOARD==============\n  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n"
 
     assert_equal boards, turn.display_boards
   end
