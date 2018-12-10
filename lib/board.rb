@@ -85,10 +85,14 @@ class Board
   end
 
   def coordinates_are_consecutive(coordinates)
-    all_coordinate_pairs(coordinates).all? do |pair|
-      letter_shift = all_letter_ordinates(pair)[1] - all_letter_ordinates(pair)[0]
-      number_shift =all_number_ordinates(pair)[1] - all_number_ordinates(pair)[0]
-      letter_shift + number_shift == 1
+    if coordinates[1].length != 2 || coordinates[0].length != 2
+      false
+    else
+      all_coordinate_pairs(coordinates).all? do |pair|
+        letter_shift = all_letter_ordinates(pair)[1] - all_letter_ordinates(pair)[0]
+        number_shift = all_number_ordinates(pair)[1] - all_number_ordinates(pair)[0]
+        letter_shift + number_shift == 1
+      end
     end
   end
 
@@ -121,5 +125,4 @@ class Board
     cell_display = cell_display.each_slice(@number).to_a
     empty_display.zip(cell_display).flatten.compact.join(" ")
   end
-
 end
