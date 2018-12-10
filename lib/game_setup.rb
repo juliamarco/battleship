@@ -4,6 +4,8 @@ require './lib/ship'
 require 'pry'
 
 class GameSetup
+    attr_accessor :turn
+
   def initialize(turn)
     @turn = turn
   end
@@ -16,7 +18,7 @@ class GameSetup
           if input  == "Q"
             return
           elsif input == "P"
-            clear_board
+            custom_board_size
             setup
             @turn.begin_game
           else
@@ -24,6 +26,26 @@ class GameSetup
           end
     end
   end
+
+  def custom_board_size
+    loop do
+      puts "Enter the size of the board from 4 to 10 (e.g. 4 creates a 4 x 4 board)."
+      board_size = gets.chomp.to_i
+      if board_size < 4
+        puts "That board size is too small. Try again."
+        next
+      elsif board_size > 10
+        puts "That board size is too large. Try again."
+        next
+      else
+        player_board = Board.new(board_size)
+        computer_board = Board.new(board_size)
+        @turn = Turn.new(player_board, computer_board)
+        break
+      end
+    end
+  end
+
 
   def setup
     computer_setup
@@ -36,7 +58,7 @@ class GameSetup
     puts "I have laid out my ships on the grid."
     puts "You now need to lay out your two ships."
     puts "The Cruiser is three units long and the Submarine is two units long."
-    puts "=============PLAYER BOARD=============\n" + "  1 2 3 4 \nA  . . . . \nB  . . . . \nC  . . . . \nD  . . . . \n"
+    puts "=============PLAYER BOARD=============\n" + @turn.player_board.render
 
     loop do
       puts "Enter the three squares for the Cruiser separated by spaces (e.g. A1 A2 A3)"
@@ -48,7 +70,7 @@ class GameSetup
         puts "Those coordinates are invalid"
       end
     end
-    puts @turn.player_board.render(true)
+    puts  "=============PLAYER BOARD=============\n" + @turn.player_board.render(true)
     loop do
       puts "Enter the two squares for the Submarine separated by spaces (e.g. A1 A2)"
       player_submarine_coordinates = gets.chomp.upcase.split
@@ -59,7 +81,6 @@ class GameSetup
       puts "Those coordinates are invalid"
       end
     end
-    puts @turn.player_board.render(true)
   end
 
   def computer_setup
@@ -79,14 +100,4 @@ class GameSetup
     end
   end
 
-  def clear_board
-   @turn.player_board.cells.values.each do |cell|
-     cell.ship = nil
-     cell.fired_upon = false
-   end
-   @turn.computer_board.cells.values.each do |cell|
-     cell.ship = nil
-     cell.fired_upon = false
-   end
  end
-end

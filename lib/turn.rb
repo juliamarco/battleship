@@ -23,6 +23,7 @@ class Turn
       puts display_boards
       player_select_coordinates
       computer_select_coordinates
+        system("clear")
       p report_player_results
       p report_computer_results
       if player_wins_game

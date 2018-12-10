@@ -83,6 +83,7 @@ class BoardTest < Minitest::Test
     board = Board.new
     display = "   1 2 3 4 \nA  . . . . \nB  . . . . \nC  . . . . \nD  . . . . \n"
     assert_equal display, board.render
+    binding.pry
     #assign board to variable
   end
 

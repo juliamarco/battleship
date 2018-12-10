@@ -5,16 +5,16 @@ require './lib/ship'
 
 class Board
   attr_reader :cells
-  def initialize
+  def initialize(number = 4)
     @cells = {}
-
-
-    create_cells
+    @letter = (64 + number).chr
+    @number = number
+    create_cells(@letter, @number)
   end
 
-  def create_cells
-    ('A'..'D').each do |letter|
-      ('1'..'4').each do |number|
+  def create_cells(letter, number)
+    ('A'.."#{letter}").each do |letter|
+      ('1'.."#{number}").each do |number|
         coordinate = "#{letter}#{number}"
         @cells[coordinate] = Cell.new(coordinate)
       end
@@ -100,7 +100,17 @@ class Board
 
   def render(show_ships = false)
     cell_display = []
-    empty_display = ["   1 2 3 4 \nA ", "\nB ", "\nC ", "\nD ", "\n"]
+    numbers_array = (1..@number).to_a
+    letters_array = ('A'..(64 + @number).chr).to_a
+    letters_array = letters_array.map do |letter|
+      "\n#{letter}"
+    end
+    letters_array << "\n"
+    numbers_array = "  " + numbers_array.join(" ") + " "
+    numbers_letters_joined = numbers_array + letters_array[0]
+    letters_array.delete_at(0)
+    empty_display = letters_array.unshift(numbers_letters_joined)
+
     @cells.values.each do |cell|
       if show_ships == true
         cell_display << cell.render(true)
@@ -108,10 +118,8 @@ class Board
         cell_display << cell.render
       end
     end
-    cell_display = cell_display.each_slice(4).to_a
+    cell_display = cell_display.each_slice(@number).to_a
     empty_display.zip(cell_display).flatten.compact.join(" ")
   end
-
-
 
 end
