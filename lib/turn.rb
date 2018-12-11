@@ -50,9 +50,8 @@ class Turn
     loop do
       player_coordinate = gets.chomp.upcase
       @player_coordinate = player_coordinate
-      # if @computer_board.cells[player_coordinate] == nil
 
-        if coordinate.valid_coordinate?(coordinate) == false
+        if @computer_board.valid_coordinate?(player_coordinate) == false
 
         puts 'That is an invalid coordinate, pick another'
       elsif @computer_board.cells[player_coordinate].fired_upon? == true

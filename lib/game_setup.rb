@@ -4,7 +4,7 @@ require './lib/ship'
 require 'pry'
 
 class GameSetup
-    attr_accessor :turn
+  attr_accessor :turn
 
   def initialize(turn)
     @turn = turn
@@ -20,7 +20,7 @@ class GameSetup
           elsif input == "P"
             custom_board_size
             setup
-            @turn.begin_game
+            @turn.begin_turn
           else
             next
           end
@@ -63,7 +63,9 @@ class GameSetup
     loop do
       puts "Enter the three squares for the Cruiser separated by spaces (e.g. A1 A2 A3)"
       player_cruiser_coordinates = gets.chomp.upcase.split
-      if @turn.player_board.valid_placement?(player_cruiser, player_cruiser_coordinates)
+      if player_cruiser_coordinates.any? {|coordinate| coordinate.length != 2}
+        puts "Those coordinates are invalid"
+      elsif @turn.player_board.valid_placement?(player_cruiser, player_cruiser_coordinates)
         @turn.player_board.place(player_cruiser, player_cruiser_coordinates)
         break
       else
@@ -74,7 +76,9 @@ class GameSetup
     loop do
       puts "Enter the two squares for the Submarine separated by spaces (e.g. A1 A2)"
       player_submarine_coordinates = gets.chomp.upcase.split
-      if @turn.player_board.valid_placement?(player_submarine, player_submarine_coordinates)
+      if player_submarine_coordinates.any? {|coordinate| coordinate.length != 2}
+        puts "Those coordinates are invalid"
+      elsif @turn.player_board.valid_placement?(player_submarine, player_submarine_coordinates)
         @turn.player_board.place(player_submarine, player_submarine_coordinates)
       break
       else

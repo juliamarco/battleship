@@ -52,9 +52,9 @@ class Board
 
   def ships_cannot_overlap(coordinates)
       coordinates.all? do |coordinate|
-        # if valid_coordinate?(coordinate)
+        if @cells.has_key?(coordinate)
           @cells[coordinate].empty?
-        # end
+        end
       end
   end
 
@@ -65,22 +65,22 @@ class Board
   end
 
   def all_letter_ordinates(coordinates)
-      letter_ordinates = all_coordinate_pairs(coordinates).flatten.map do |coordinate|
+      all_coordinate_pairs(coordinates).flatten.map do |coordinate|
       coordinate[0].ord
       end
   end
 
   def all_number_ordinates(coordinates)
-      number_ordinates = all_coordinate_pairs(coordinates).flatten.map do |coordinate|
+      all_coordinate_pairs(coordinates).flatten.map do |coordinate|
       coordinate[1].ord
       end
   end
 
   def compare_ordinates(coordinates)
     if all_letter_ordinates(coordinates).uniq.length > 1 && all_number_ordinates(coordinates).uniq.length > 1
-      return false
+      false
     else
-      return true
+      true
     end
   end
 
