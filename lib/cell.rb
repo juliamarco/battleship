@@ -1,5 +1,6 @@
 class Cell
   attr_reader   :coordinate
+
   attr_accessor :ship,
                 :fired_upon
 
@@ -28,8 +29,8 @@ class Cell
     @fired_upon
   end
 
-  def render(own_ship = false)
-    if own_ship == true && @fired_upon == false && @ship.nil? == false
+  def render(player_ship = false)
+    if player_ship == true && @fired_upon == false && @ship.nil? == false
       'S'
     elsif @fired_upon == false
       '.'

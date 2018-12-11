@@ -23,12 +23,12 @@ class Board
 
   def valid_coordinates?(coordinates)
     coordinates.all? do |coordinate|
-      @cells.keys.include?(coordinate)
+      @cells.has_key?(coordinate)
     end
   end
 
   def valid_coordinate?(coordinate)
-      @cells.keys.include?(coordinate)
+    @cells.has_key?(coordinate)
   end
 
 
@@ -52,9 +52,9 @@ class Board
 
   def ships_cannot_overlap(coordinates)
       coordinates.all? do |coordinate|
-        if @cells.has_key?(coordinate)
+        # if valid_coordinate?(coordinate)
           @cells[coordinate].empty?
-        end
+        # end
       end
   end
 

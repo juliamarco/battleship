@@ -18,7 +18,7 @@ class Turn
   end
 
 
-  def begin_game
+  def begin_turn
     loop do
       puts display_boards
       player_select_coordinates
@@ -50,9 +50,9 @@ class Turn
     loop do
       player_coordinate = gets.chomp.upcase
       @player_coordinate = player_coordinate
-      if @computer_board.cells[player_coordinate] == nil
+      # if @computer_board.cells[player_coordinate] == nil
 
-        # if coordinate.valid_coordinate?(coordinate)
+        if coordinate.valid_coordinate?(coordinate) == false
 
         puts 'That is an invalid coordinate, pick another'
       elsif @computer_board.cells[player_coordinate].fired_upon? == true
