@@ -4,10 +4,12 @@ require './lib/ship'
 require 'pry'
 
 class GameSetup
-  attr_accessor :turn
+  attr_accessor :turn,
+                :board_size
 
   def initialize(turn)
     @turn = turn
+    @board_size = nil
   end
 
   def main_menu
@@ -31,6 +33,7 @@ class GameSetup
     loop do
       puts "Enter the size of the board from 4 to 10 (e.g. 4 creates a 4 x 4 board)."
       board_size = gets.chomp.to_i
+      @board_size = board_size
       if board_size < 4
         puts "That board size is too small. Try again."
         next
@@ -53,39 +56,86 @@ class GameSetup
   end
 
   def player_setup
-    player_cruiser = Ship.new('cruiser', 3)
-    player_submarine = Ship.new('submarine', 2)
-    puts "I have laid out my ships on the grid."
-    puts "You now need to lay out your two ships."
-    puts "The Cruiser is three units long and the Submarine is two units long."
-    puts "=============PLAYER BOARD=============\n" + @turn.player_board.render
-
+  puts "It's time to create your ships"
+  loop do
+    puts "Enter a ship name"
+    ship_name = gets.chomp
+    @ship_name = ship_name
+    loop do puts "Enter a ship length from 2 to #{@board_size}"
+      ship_length = gets.chomp.to_i
+        if ship_length < 2 || ship_length > @board_size
+          puts "That length is invalid, try again"
+        else @ship_length = ship_length
+          break
+        end
+      end
     loop do
-      puts "Enter the three squares for the Cruiser separated by spaces (e.g. A1 A2 A3)"
-      player_cruiser_coordinates = gets.chomp.upcase.split
-      if player_cruiser_coordinates.any? {|coordinate| coordinate.length != 2}
+       puts  "=============PLAYER BOARD=============\n" + @turn.player_board.render(true)
+      puts "Enter the #{@ship_length} squares for the #{@ship_name} separated by spaces (e.g. A1 A2 A3)"
+      player_ship = Ship.new(@ship_name, @ship_length)
+      player_ship_coordinates = gets.chomp.upcase.split
+      if player_ship_coordinates.any? {|coordinate| coordinate.length != 2}
         puts "Those coordinates are invalid"
-      elsif @turn.player_board.valid_placement?(player_cruiser, player_cruiser_coordinates)
-        @turn.player_board.place(player_cruiser, player_cruiser_coordinates)
+      elsif @turn.player_board.valid_placement?(player_ship, player_ship_coordinates)
+        @turn.player_board.place(player_ship, player_ship_coordinates)
+        puts  "=============PLAYER BOARD=============\n" + @turn.player_board.render(true)
         break
       else
         puts "Those coordinates are invalid"
       end
     end
-    puts  "=============PLAYER BOARD=============\n" + @turn.player_board.render(true)
     loop do
-      puts "Enter the two squares for the Submarine separated by spaces (e.g. A1 A2)"
-      player_submarine_coordinates = gets.chomp.upcase.split
-      if player_submarine_coordinates.any? {|coordinate| coordinate.length != 2}
-        puts "Those coordinates are invalid"
-      elsif @turn.player_board.valid_placement?(player_submarine, player_submarine_coordinates)
-        @turn.player_board.place(player_submarine, player_submarine_coordinates)
-      break
+      puts "Would you like to create another ship? y/n"
+        answer = gets.chomp.upcase
+        if answer == "Y"
+          break
+      elsif answer == "N"
+        return
       else
-      puts "Those coordinates are invalid"
+        next
       end
     end
   end
+  end
+
+
+
+    #
+    #
+    #
+    # player_cruiser = Ship.new('cruiser', 3)
+    # player_submarine = Ship.new('submarine', 2)
+    # puts "I have laid out my ships on the grid."
+    # puts "You now need to lay out your two ships."
+    # puts "The Cruiser is three units long and the Submarine is two units long."
+    # puts "=============PLAYER BOARD=============\n" + @turn.player_board.render
+  #
+  #   loop do
+  #     puts "Enter the three squares for the Cruiser separated by spaces (e.g. A1 A2 A3)"
+  #     player_cruiser_coordinates = gets.chomp.upcase.split
+  #     if player_cruiser_coordinates.any? {|coordinate| coordinate.length != 2}
+  #       puts "Those coordinates are invalid"
+  #     elsif @turn.player_board.valid_placement?(player_cruiser, player_cruiser_coordinates)
+  #       @turn.player_board.place(player_cruiser, player_cruiser_coordinates)
+  #       break
+  #     else
+  #       puts "Those coordinates are invalid"
+  #     end
+  #   end
+  #   puts  "=============PLAYER BOARD=============\n" + @turn.player_board.render(true)
+  #   loop do
+  #     puts "Enter the two squares for the Submarine separated by spaces (e.g. A1 A2)"
+  #     player_submarine_coordinates = gets.chomp.upcase.split
+  #     if player_submarine_coordinates.any? {|coordinate| coordinate.length != 2}
+  #       puts "Those coordinates are invalid"
+  #     elsif @turn.player_board.valid_placement?(player_submarine, player_submarine_coordinates)
+  #       @turn.player_board.place(player_submarine, player_submarine_coordinates)
+  #     break
+  #     else
+  #     puts "Those coordinates are invalid"
+  #     end
+  #   end
+  # end
 
   def computer_setup
     computer_cruiser = Ship.new('cruiser', 3)
