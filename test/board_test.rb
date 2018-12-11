@@ -51,7 +51,7 @@ class BoardTest < Minitest::Test
     assert_equal true, board.valid_placement?(cruiser, ['B1', 'C1', 'D1'])
     assert_equal false, board.valid_placement?(cruiser, ['A1', 'B1', 'B2'])
     assert_equal true, board.valid_placement?(submarine, ['A1', 'A2'])
-    assert_equal false, board.valid_placement?(submarine, ['F3', "H7"])
+    assert_equal false, board.valid_placement?(submarine, ['F3', 'H7'])
   end
 
   def test_we_can_place_a_ship
@@ -81,7 +81,7 @@ class BoardTest < Minitest::Test
 
   def test_board_can_render
     board = Board.new
-    display = "   1 2 3 4 \nA  . . . . \nB  . . . . \nC  . . . . \nD  . . . . \n"
+    display = "  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n"
     assert_equal display, board.render
     #assign board to variable
   end
@@ -91,7 +91,7 @@ class BoardTest < Minitest::Test
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     board.place(cruiser, ['A1', 'A2', 'A3'])
-    display = "   1 2 3 4 \nA  S S S . \nB  . . . . \nC  . . . . \nD  . . . . \n"
+    display = "  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n"
     assert_equal display, board.render(true)
   end
 
@@ -101,7 +101,7 @@ class BoardTest < Minitest::Test
     cruiser = Ship.new('Cruiser', 3)
     board.place(cruiser, ['A1', 'A2', 'A3'])
     board.cells["A3"].fire_upon
-    display = "   1 2 3 4 \nA  . . H . \nB  . . . . \nC  . . . . \nD  . . . . \n"
+    display = "  1 2 3 4 \nA . . H . \nB . . . . \nC . . . . \nD . . . . \n"
     assert_equal display, board.render
   end
 
@@ -109,7 +109,7 @@ class BoardTest < Minitest::Test
 
     board = Board.new
     board.cells["A3"].fire_upon
-    display = "   1 2 3 4 \nA  . . M . \nB  . . . . \nC  . . . . \nD  . . . . \n"
+    display = "  1 2 3 4 \nA . . M . \nB . . . . \nC . . . . \nD . . . . \n"
     assert_equal display, board.render
   end
 
@@ -120,7 +120,7 @@ class BoardTest < Minitest::Test
     board.place(submarine, ['A2', 'A3'])
     board.cells['A2'].fire_upon
     board.cells['A3'].fire_upon
-    display = "   1 2 3 4 \nA  . X X . \nB  . . . . \nC  . . . . \nD  . . . . \n"
+    display = "  1 2 3 4 \nA . X X . \nB . . . . \nC . . . . \nD . . . . \n"
     assert_equal display, board.render
   end
 end

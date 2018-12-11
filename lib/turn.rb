@@ -18,11 +18,12 @@ class Turn
   end
 
 
-  def begin_game
+  def begin_turn
     loop do
       puts display_boards
       player_select_coordinates
       computer_select_coordinates
+        system("clear")
       p report_player_results
       p report_computer_results
       if player_wins_game
@@ -30,6 +31,7 @@ class Turn
         break
       elsif computer_wins_game
         puts "You lose."
+        break
       else next
       end
     end
@@ -48,9 +50,8 @@ class Turn
     loop do
       player_coordinate = gets.chomp.upcase
       @player_coordinate = player_coordinate
-      if @computer_board.cells[player_coordinate] == nil
 
-        # if coordinate.valid_coordinate?(coordinate)
+        if @computer_board.valid_coordinate?(player_coordinate) == false
 
         puts 'That is an invalid coordinate, pick another'
       elsif @computer_board.cells[player_coordinate].fired_upon? == true
@@ -95,11 +96,11 @@ class Turn
 
   def report_player_results
     if @computer_board.cells[@player_coordinate].render == 'M'
-      "My shot on #{@player_coordinate} was a miss."
+      "Your shot on #{@player_coordinate} was a miss."
     elsif @computer_board.cells[@player_coordinate].render == 'H'
-      "My shot on #{@player_coordinate} was a hit."
+      "Your shot on #{@player_coordinate} was a hit."
     elsif @computer_board.cells[@player_coordinate].render == 'X'
-      "My shot on #{@player_coordinate} sunk your ship."
+      "Your shot on #{@player_coordinate} sunk my ship."
     end
   end
 

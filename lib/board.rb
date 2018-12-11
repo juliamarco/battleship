@@ -5,16 +5,16 @@ require './lib/ship'
 
 class Board
   attr_reader :cells
-  def initialize
+  def initialize(number = 4)
     @cells = {}
-
-
-    create_cells
+    @letter = (64 + number).chr
+    @number = number
+    create_cells(@letter, @number)
   end
 
-  def create_cells
-    ('A'..'D').each do |letter|
-      ('1'..'4').each do |number|
+  def create_cells(letter, number)
+    ('A'.."#{letter}").each do |letter|
+      ('1'.."#{number}").each do |number|
         coordinate = "#{letter}#{number}"
         @cells[coordinate] = Cell.new(coordinate)
       end
@@ -23,12 +23,12 @@ class Board
 
   def valid_coordinates?(coordinates)
     coordinates.all? do |coordinate|
-      @cells.keys.include?(coordinate)
+      @cells.has_key?(coordinate)
     end
   end
 
   def valid_coordinate?(coordinate)
-      @cells.keys.include?(coordinate)
+    @cells.has_key?(coordinate)
   end
 
 
@@ -65,30 +65,34 @@ class Board
   end
 
   def all_letter_ordinates(coordinates)
-      letter_ordinates = all_coordinate_pairs(coordinates).flatten.map do |coordinate|
+      all_coordinate_pairs(coordinates).flatten.map do |coordinate|
       coordinate[0].ord
       end
   end
 
   def all_number_ordinates(coordinates)
-      number_ordinates = all_coordinate_pairs(coordinates).flatten.map do |coordinate|
+      all_coordinate_pairs(coordinates).flatten.map do |coordinate|
       coordinate[1].ord
       end
   end
 
   def compare_ordinates(coordinates)
     if all_letter_ordinates(coordinates).uniq.length > 1 && all_number_ordinates(coordinates).uniq.length > 1
-      return false
+      false
     else
-      return true
+      true
     end
   end
 
   def coordinates_are_consecutive(coordinates)
-    all_coordinate_pairs(coordinates).all? do |pair|
-      letter_shift = all_letter_ordinates(pair)[1] - all_letter_ordinates(pair)[0]
-      number_shift =all_number_ordinates(pair)[1] - all_number_ordinates(pair)[0]
-      letter_shift + number_shift == 1
+    if coordinates[1].length != 2 || coordinates[0].length != 2
+      false
+    else
+      all_coordinate_pairs(coordinates).all? do |pair|
+        letter_shift = all_letter_ordinates(pair)[1] - all_letter_ordinates(pair)[0]
+        number_shift = all_number_ordinates(pair)[1] - all_number_ordinates(pair)[0]
+        letter_shift + number_shift == 1
+      end
     end
   end
 
@@ -100,7 +104,17 @@ class Board
 
   def render(show_ships = false)
     cell_display = []
-    empty_display = ["   1 2 3 4 \nA ", "\nB ", "\nC ", "\nD ", "\n"]
+    numbers_array = (1..@number).to_a
+    letters_array = ('A'..(64 + @number).chr).to_a
+    letters_array = letters_array.map do |letter|
+      "\n#{letter}"
+    end
+    letters_array << "\n"
+    numbers_array = "  " + numbers_array.join(" ") + " "
+    numbers_letters_joined = numbers_array + letters_array[0]
+    letters_array.delete_at(0)
+    empty_display = letters_array.unshift(numbers_letters_joined)
+
     @cells.values.each do |cell|
       if show_ships == true
         cell_display << cell.render(true)
@@ -108,10 +122,7 @@ class Board
         cell_display << cell.render
       end
     end
-    cell_display = cell_display.each_slice(4).to_a
+    cell_display = cell_display.each_slice(@number).to_a
     empty_display.zip(cell_display).flatten.compact.join(" ")
   end
-
-
-
 end
