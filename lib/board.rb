@@ -33,6 +33,7 @@ class Board
 
 
   def valid_placement?(ship, coordinates)
+    # binding.pry
     all_values = []
     all_values << number_of_ordinates_equals_length(ship, coordinates)
     all_values << valid_coordinates?(coordinates)
@@ -85,15 +86,12 @@ class Board
   end
 
   def coordinates_are_consecutive(coordinates)
-    if coordinates[1].length != 2 || coordinates[0].length != 2
-      false
-    else
-      all_coordinate_pairs(coordinates).all? do |pair|
+    all_coordinate_pairs(coordinates).all? do |pair|
+
         letter_shift = all_letter_ordinates(pair)[1] - all_letter_ordinates(pair)[0]
         number_shift = all_number_ordinates(pair)[1] - all_number_ordinates(pair)[0]
         letter_shift + number_shift == 1
-      end
-    end
+        end
   end
 
   def place(ship, coordinates)

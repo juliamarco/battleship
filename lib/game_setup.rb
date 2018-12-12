@@ -10,6 +10,10 @@ class GameSetup
   def initialize(turn)
     @turn = turn
     @board_size = nil
+    @ship_name = 0
+    @player_ships = []
+
+    @ship_length = 0
   end
 
   def main_menu
@@ -51,8 +55,9 @@ class GameSetup
 
 
   def setup
-    computer_setup
     player_setup
+    #
+    computer_setup
   end
 
   def player_setup
@@ -73,6 +78,7 @@ class GameSetup
        puts  "=============PLAYER BOARD=============\n" + @turn.player_board.render(true)
       puts "Enter the #{@ship_length} squares for the #{@ship_name} separated by spaces (e.g. A1 A2 A3)"
       player_ship = Ship.new(@ship_name, @ship_length)
+      @player_ships << player_ship
       player_ship_coordinates = gets.chomp.upcase.split
       if player_ship_coordinates.any? {|coordinate| coordinate.length != 2}
         puts "Those coordinates are invalid"
@@ -99,59 +105,58 @@ class GameSetup
   end
 
 
-
-    #
-    #
-    #
-    # player_cruiser = Ship.new('cruiser', 3)
-    # player_submarine = Ship.new('submarine', 2)
-    # puts "I have laid out my ships on the grid."
-    # puts "You now need to lay out your two ships."
-    # puts "The Cruiser is three units long and the Submarine is two units long."
-    # puts "=============PLAYER BOARD=============\n" + @turn.player_board.render
-  #
-  #   loop do
-  #     puts "Enter the three squares for the Cruiser separated by spaces (e.g. A1 A2 A3)"
-  #     player_cruiser_coordinates = gets.chomp.upcase.split
-  #     if player_cruiser_coordinates.any? {|coordinate| coordinate.length != 2}
-  #       puts "Those coordinates are invalid"
-  #     elsif @turn.player_board.valid_placement?(player_cruiser, player_cruiser_coordinates)
-  #       @turn.player_board.place(player_cruiser, player_cruiser_coordinates)
-  #       break
-  #     else
-  #       puts "Those coordinates are invalid"
-  #     end
-  #   end
-  #   puts  "=============PLAYER BOARD=============\n" + @turn.player_board.render(true)
-  #   loop do
-  #     puts "Enter the two squares for the Submarine separated by spaces (e.g. A1 A2)"
-  #     player_submarine_coordinates = gets.chomp.upcase.split
-  #     if player_submarine_coordinates.any? {|coordinate| coordinate.length != 2}
-  #       puts "Those coordinates are invalid"
-  #     elsif @turn.player_board.valid_placement?(player_submarine, player_submarine_coordinates)
-  #       @turn.player_board.place(player_submarine, player_submarine_coordinates)
-  #     break
-  #     else
-  #     puts "Those coordinates are invalid"
-  #     end
-  #   end
-  # end
-
   def computer_setup
-    computer_cruiser = Ship.new('cruiser', 3)
-    computer_submarine = Ship.new('submarine', 2)
-    valid_cruiser_placement = [['A1', 'A2', 'A3'], ['A2', 'A3', 'A4'], ['B1', 'B2', 'B3'], ['B2', 'B3', 'B4'], ['C1', 'C2', 'C3'], ['C2', 'C3', 'C4'], ['D1', 'D2', 'D3'], ['D2', 'D3', 'D4'], ['A1', 'B1', 'C1'], ['C1', 'B1', 'D1'], ['A2', 'B2', 'C2'], ['B2', 'C2', 'D2'], ['A3', 'B3', 'C3'], ['B3', 'C3', 'D3'], ['A4', 'B4', 'C4'], ['B4', 'C4', 'D4']]
-    random_cruiser_coordinate = valid_cruiser_placement.sample
-    @turn.computer_board.place(computer_cruiser, random_cruiser_coordinate)
-    @turn.computer_board.render(false)
-    valid_submarine_placement = [['A1', 'A2'], ['A2', 'A3'], ['A3', 'A4'], ['B1', 'B2'], ['B2', 'B3'], ['B3', 'B4'], ['C1', 'C2'], ['C2', 'C3'], ['C3', 'C4'], ['D1', 'D2'], ['D2', 'D3'], ['D3', 'D4'], ['A1', 'B1'], ['B1', 'C1'], ['C1', 'D1'], ['A2', 'B2'], ['B2', 'C2'], ['C2', 'D2'], ['A3', 'B3'], ['B3', 'C3'], ['C3', 'D3'], ['A4', 'B4'], ['B4', 'C4'], ['C4', 'D4']]
-    loop do
-      random_submarine_coordinate = valid_submarine_placement.sample
-      if @turn.computer_board.valid_placement?(computer_submarine, random_submarine_coordinate)
-        @turn.computer_board.place(computer_submarine, random_submarine_coordinate)
-        break
+    while @player_ships.count > 0
+      computer_create_possible_placements
+
+       @turn.computer_board.render(true)
+
+      @player_ships.shift
+    end
+  end
+
+
+
+  def computer_create_possible_coordinates
+    #
+    letter = (64 + @board_size).chr
+    number = @board_size
+     ('A'.."#{letter}").map do |letter|
+      placements = ('1'.."#{number}").map do |number|
+        "#{letter}#{number}"
       end
     end
+  end
+
+  def computer_create_possible_placements
+      loop do
+        possible_horizontal_placements = computer_create_possible_coordinates.flatten.each_cons(@player_ships[0].length).map do |coordinates|
+          coordinates
+        end
+        # render
+        sorted_coordinates = computer_create_possible_coordinates
+          array = []
+          until sorted_coordinates[-1].empty?
+            sorted_coordinates.each do |coordinate|
+              array << coordinate[0]
+              coordinate.shift
+            end
+          end
+          possible_vertical_placements = array.each_cons(@player_ships[0].length).map do |coordinates|
+            coordinates
+          end
+
+
+
+        all_possible_placements = (possible_horizontal_placements + possible_vertical_placements)
+        ship = Ship.new(@player_ships[0].name, @player_ships[0].length)
+        random_placement = all_possible_placements.sample
+        if @turn.computer_board.valid_placement?(ship, random_placement)
+          @turn.computer_board.place(ship, random_placement)
+          break
+        end
+    end
+    # create_possible_coordinates.flatten.sort_by
   end
 
  end
