@@ -23,14 +23,18 @@ class Turn
       puts display_boards
       player_select_coordinates
       computer_select_coordinates
-        system("clear")
+        system('clear')
       p report_player_results
       p report_computer_results
       if player_wins_game
+        system('clear')
         puts "You win!"
+        puts display_boards
         break
       elsif computer_wins_game
+        system('clear')
         puts "You lose."
+        puts display_boards
         break
       else next
       end

@@ -24,10 +24,12 @@ class GameSetup
           if input  == "Q"
             return
           elsif input == "P"
+            system('clear')
             custom_board_size
             setup
             @turn.begin_turn
           else
+            system('clear')
             next
           end
     end
@@ -39,15 +41,18 @@ class GameSetup
       board_size = gets.chomp.to_i
       @board_size = board_size
       if board_size < 4
+        system('clear')
         puts "That board size is too small. Try again."
         next
       elsif board_size > 10
+        system('clear')
         puts "That board size is too large. Try again."
         next
       else
         player_board = Board.new(board_size)
         computer_board = Board.new(board_size)
         @turn = Turn.new(player_board, computer_board)
+        system('clear')
         break
       end
     end
@@ -61,16 +66,19 @@ class GameSetup
   end
 
   def player_setup
-  puts "It's time to create your ships"
   loop do
     puts "Enter a ship name"
     ship_name = gets.chomp
+    system('clear')
     @ship_name = ship_name
-    loop do puts "Enter a ship length from 2 to #{@board_size}"
-      ship_length = gets.chomp.to_i
+      loop do
+        puts "Enter a ship length from 2 to #{@board_size}"
+        ship_length = gets.chomp.to_i
         if ship_length < 2 || ship_length > @board_size
+          system('clear')
           puts "That length is invalid, try again"
         else @ship_length = ship_length
+          system('clear')
           break
         end
       end
@@ -81,12 +89,15 @@ class GameSetup
       @player_ships << player_ship
       player_ship_coordinates = gets.chomp.upcase.split
       if player_ship_coordinates.any? {|coordinate| coordinate.length != 2}
+        system('clear')
         puts "Those coordinates are invalid"
       elsif @turn.player_board.valid_placement?(player_ship, player_ship_coordinates)
         @turn.player_board.place(player_ship, player_ship_coordinates)
+        system('clear')
         puts  "=============PLAYER BOARD=============\n" + @turn.player_board.render(true)
         break
       else
+        system('clear')
         puts "Those coordinates are invalid"
       end
     end
@@ -94,10 +105,14 @@ class GameSetup
       puts "Would you like to create another ship? y/n"
         answer = gets.chomp.upcase
         if answer == "Y"
+          system('clear')
           break
       elsif answer == "N"
+        system('clear')
         return
       else
+        system('clear')
+        puts  "=============PLAYER BOARD=============\n" + @turn.player_board.render(true)
         next
       end
     end
