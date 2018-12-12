@@ -29,7 +29,7 @@ class Turn
         system('clear')
         p report_player_results
         p report_computer_results
-        puts 'You win!'
+        puts 'YOU WIN!'
         puts display_boards
         break
       elsif computer_wins_game

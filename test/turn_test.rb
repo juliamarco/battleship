@@ -22,7 +22,6 @@ class TurnTest < Minitest::Test
     assert_equal boards, turn.display_boards
   end
 
-
   def test_player_fires_shots
     player_board = Board.new
     computer_board = Board.new
