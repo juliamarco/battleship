@@ -27,11 +27,15 @@ class Turn
       p report_computer_results
       if player_wins_game
         system('clear')
+        p report_player_results
+        p report_computer_results
         puts 'You win!'
         puts display_boards
         break
       elsif computer_wins_game
         system('clear')
+        p report_player_results
+        p report_computer_results
         puts 'You lose.'
         puts display_boards
         break
@@ -91,8 +95,12 @@ class Turn
     elsif @player_board.cells[@computer_coordinate].render == 'H'
       "My shot on #{@computer_coordinate} was a hit."
     elsif @player_board.cells[@computer_coordinate].render == 'X'
-      "My shot on #{@computer_coordinate} sunk your ship."
+      "My shot on #{@computer_coordinate} sunk your #{report_player_ship_name(@computer_coordinate)}."
     end
+  end
+
+  def report_player_ship_name(coordinate)
+    @player_board.cells[coordinate].ship.name
   end
 
   def report_player_results
@@ -101,9 +109,14 @@ class Turn
     elsif @computer_board.cells[@player_coordinate].render == 'H'
       "Your shot on #{@player_coordinate} was a hit."
     elsif @computer_board.cells[@player_coordinate].render == 'X'
-      "Your shot on #{@player_coordinate} sunk my ship."
+      "Your shot on #{@player_coordinate} sunk my #{report_computer_ship_name(@player_coordinate)}."
     end
   end
+
+  def report_computer_ship_name(coordinate)
+    @computer_board.cells[coordinate].ship.name
+  end
+
 
   def player_wins_game
     cells_with_ship = @computer_board.cells.values.map do |cell|

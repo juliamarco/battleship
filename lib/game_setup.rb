@@ -64,7 +64,16 @@ class GameSetup
   end
 
   def player_setup
-  loop do
+    loop do
+      player_creates_ship
+      player_places_ship
+        if ask_player_if_they_want_to_create_another_ship == false
+          return
+        end
+      end
+    end
+
+  def player_creates_ship
     puts 'Enter a ship name'
     ship_name = gets.chomp
     system('clear')
@@ -80,55 +89,55 @@ class GameSetup
           break
         end
       end
-    loop do
-       puts  "=============PLAYER BOARD=============\n" + @turn.player_board.render(true)
-      puts "Enter the #{@ship_length} squares for the #{@ship_name} separated by spaces (e.g. A1 A2 A3)"
-      player_ship = Ship.new(@ship_name, @ship_length)
-      @player_ships << player_ship
-      player_ship_coordinates = gets.chomp.upcase.split
-      if player_ship_coordinates.any? {|coordinate| coordinate.length != 2}
-        system('clear')
-        puts 'Those coordinates are invalid'
-      elsif @turn.player_board.valid_placement?(player_ship, player_ship_coordinates)
-        @turn.player_board.place(player_ship, player_ship_coordinates)
-        system('clear')
-        puts  "=============PLAYER BOARD=============\n" + @turn.player_board.render(true)
-        break
-      else
-        system('clear')
-        puts 'Those coordinates are invalid'
+    end
+
+    def player_places_ship
+      loop do
+         puts  "=============PLAYER BOARD=============\n" + @turn.player_board.render(true)
+        puts "Enter the #{@ship_length} squares for the #{@ship_name} separated by spaces (e.g. A1 A2 A3)"
+        player_ship = Ship.new(@ship_name, @ship_length)
+        @player_ships << player_ship
+        player_ship_coordinates = gets.chomp.upcase.split
+        if player_ship_coordinates.any? {|coordinate| coordinate.length != 2}
+          system('clear')
+          puts 'Those coordinates are invalid'
+        elsif @turn.player_board.valid_placement?(player_ship, player_ship_coordinates)
+          @turn.player_board.place(player_ship, player_ship_coordinates)
+          system('clear')
+          puts  "=============PLAYER BOARD=============\n" + @turn.player_board.render(true)
+          break
+        else
+          system('clear')
+          puts 'Those coordinates are invalid'
+        end
       end
     end
+
+    def ask_player_if_they_want_to_create_another_ship
     loop do
       puts 'Would you like to create another ship? y/n'
         answer = gets.chomp.upcase
         if answer == 'Y'
           system('clear')
           break
-      elsif answer == 'N'
-        system('clear')
-        return
-      else
-        system('clear')
-        puts  "=============PLAYER BOARD=============\n" + @turn.player_board.render(true)
-        next
+        elsif answer == 'N'
+          system('clear')
+          return false
+        else
+          system('clear')
+          puts  "=============PLAYER BOARD=============\n" + @turn.player_board.render(true)
+          next
+        end
       end
     end
-  end
-  end
-
 
   def computer_setup
     while @player_ships.count > 0
       computer_create_possible_placements
-
        @turn.computer_board.render(true)
-
       @player_ships.shift
     end
   end
-
-
 
   def computer_create_possible_coordinates
     letter = (64 + @board_size).chr

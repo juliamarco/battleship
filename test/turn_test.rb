@@ -35,7 +35,6 @@ class TurnTest < Minitest::Test
     assert_equal true, computer_board.cells['A1'].fired_upon?
   end
 
-
   def test_computer_fires_shots
     player_board = Board.new
     computer_board = Board.new
