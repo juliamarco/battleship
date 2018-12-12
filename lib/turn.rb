@@ -4,11 +4,11 @@ require './lib/ship'
 require 'pry'
 
 class Turn
+  attr_accessor :computer_coordinate,
+                :player_coordinate
 
-    attr_accessor :computer_coordinate,
-                  :player_coordinate
-    attr_reader :player_board,
-                :computer_board
+  attr_reader :player_board,
+              :computer_board
 
   def initialize(player_board, computer_board)
     @player_board = player_board
@@ -17,23 +17,22 @@ class Turn
     @computer_coordinate = nil
   end
 
-
   def begin_turn
     loop do
       puts display_boards
       player_select_coordinates
       computer_select_coordinates
-        system('clear')
+      system('clear')
       p report_player_results
       p report_computer_results
       if player_wins_game
         system('clear')
-        puts "You win!"
+        puts 'You win!'
         puts display_boards
         break
       elsif computer_wins_game
         system('clear')
-        puts "You lose."
+        puts 'You lose.'
         puts display_boards
         break
       else next
@@ -43,10 +42,10 @@ class Turn
 
   def display_boards
     boards = "=============COMPUTER BOARD=============\n" +
-    @computer_board.render +
-    "==============PLAYER BOARD==============\n" +
-    @player_board.render(true)
-    return boards
+             @computer_board.render +
+             "==============PLAYER BOARD==============\n" +
+             @player_board.render(true)
+    boards
   end
 
   def player_select_coordinates
@@ -54,9 +53,7 @@ class Turn
     loop do
       player_coordinate = gets.chomp.upcase
       @player_coordinate = player_coordinate
-
-        if @computer_board.valid_coordinate?(player_coordinate) == false
-
+      if @computer_board.valid_coordinate?(player_coordinate) == false
         puts 'That is an invalid coordinate, pick another'
       elsif @computer_board.cells[player_coordinate].fired_upon? == true
         puts 'You have already fired upon that coordinate, pick another'
@@ -115,7 +112,7 @@ class Turn
       end
     end
     cells_with_ship.compact!.all? do |health|
-      health == 0
+      health.zero?
     end
   end
 
@@ -126,7 +123,7 @@ class Turn
       end
     end
     cells_with_ship.compact!.all? do |health|
-      health == 0
+      health.zero?
     end
   end
 end
