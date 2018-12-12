@@ -4,11 +4,11 @@ require './lib/ship'
 require 'pry'
 
 class Turn
+  attr_accessor :computer_coordinate,
+                :player_coordinate
 
-    attr_accessor :computer_coordinate,
-                  :player_coordinate
-    attr_reader :player_board,
-                :computer_board
+  attr_reader :player_board,
+              :computer_board
 
   def initialize(player_board, computer_board)
     @player_board = player_board
@@ -17,20 +17,27 @@ class Turn
     @computer_coordinate = nil
   end
 
-
   def begin_turn
     loop do
       puts display_boards
       player_select_coordinates
       computer_select_coordinates
-        system("clear")
+      system('clear')
       p report_player_results
       p report_computer_results
       if player_wins_game
-        puts "You win!"
+        system('clear')
+        p report_player_results
+        p report_computer_results
+        puts 'You win!'
+        puts display_boards
         break
       elsif computer_wins_game
-        puts "You lose."
+        system('clear')
+        p report_player_results
+        p report_computer_results
+        puts 'You lose.'
+        puts display_boards
         break
       else next
       end
@@ -39,10 +46,10 @@ class Turn
 
   def display_boards
     boards = "=============COMPUTER BOARD=============\n" +
-    @computer_board.render +
-    "==============PLAYER BOARD==============\n" +
-    @player_board.render(true)
-    return boards
+             @computer_board.render +
+             "==============PLAYER BOARD==============\n" +
+             @player_board.render(true)
+    boards
   end
 
   def player_select_coordinates
@@ -50,11 +57,9 @@ class Turn
     loop do
       player_coordinate = gets.chomp.upcase
       @player_coordinate = player_coordinate
-
-        if @computer_board.valid_coordinate?(player_coordinate) == false
-
+      if @computer_board.valid_coordinate?(player_coordinate) == false
         puts 'That is an invalid coordinate, pick another'
-      elsif @computer_board.cells[player_coordinate].fired_upon? == true
+      elsif @computer_board.cells[player_coordinate].fired_upon?
         puts 'You have already fired upon that coordinate, pick another'
       elsif @computer_board.valid_coordinate?(player_coordinate)
         player_fire_shot(player_coordinate)
@@ -67,7 +72,7 @@ class Turn
     loop do
       computer_coordinate = @player_board.cells.keys.sample
       @computer_coordinate = computer_coordinate
-      if @player_board.cells[computer_coordinate].fired_upon? == true
+      if @player_board.cells[computer_coordinate].fired_upon?
         next
       else
         computer_fire_shot(computer_coordinate)
@@ -90,8 +95,12 @@ class Turn
     elsif @player_board.cells[@computer_coordinate].render == 'H'
       "My shot on #{@computer_coordinate} was a hit."
     elsif @player_board.cells[@computer_coordinate].render == 'X'
-      "My shot on #{@computer_coordinate} sunk your ship."
+      "My shot on #{@computer_coordinate} sunk your #{report_player_ship_name(@computer_coordinate)}."
     end
+  end
+
+  def report_player_ship_name(coordinate)
+    @player_board.cells[coordinate].ship.name
   end
 
   def report_player_results
@@ -100,8 +109,12 @@ class Turn
     elsif @computer_board.cells[@player_coordinate].render == 'H'
       "Your shot on #{@player_coordinate} was a hit."
     elsif @computer_board.cells[@player_coordinate].render == 'X'
-      "Your shot on #{@player_coordinate} sunk my ship."
+      "Your shot on #{@player_coordinate} sunk my #{report_computer_ship_name(@player_coordinate)}."
     end
+  end
+
+  def report_computer_ship_name(coordinate)
+    @computer_board.cells[coordinate].ship.name
   end
 
   def player_wins_game
@@ -111,7 +124,7 @@ class Turn
       end
     end
     cells_with_ship.compact!.all? do |health|
-      health == 0
+      health.zero?
     end
   end
 
@@ -122,7 +135,7 @@ class Turn
       end
     end
     cells_with_ship.compact!.all? do |health|
-      health == 0
+      health.zero?
     end
   end
 end
