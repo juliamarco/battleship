@@ -59,7 +59,7 @@ class Turn
       @player_coordinate = player_coordinate
       if @computer_board.valid_coordinate?(player_coordinate) == false
         puts 'That is an invalid coordinate, pick another'
-      elsif @computer_board.cells[player_coordinate].fired_upon? == true
+      elsif @computer_board.cells[player_coordinate].fired_upon?
         puts 'You have already fired upon that coordinate, pick another'
       elsif @computer_board.valid_coordinate?(player_coordinate)
         player_fire_shot(player_coordinate)
@@ -72,7 +72,7 @@ class Turn
     loop do
       computer_coordinate = @player_board.cells.keys.sample
       @computer_coordinate = computer_coordinate
-      if @player_board.cells[computer_coordinate].fired_upon? == true
+      if @player_board.cells[computer_coordinate].fired_upon?
         next
       else
         computer_fire_shot(computer_coordinate)
@@ -116,7 +116,6 @@ class Turn
   def report_computer_ship_name(coordinate)
     @computer_board.cells[coordinate].ship.name
   end
-
 
   def player_wins_game
     cells_with_ship = @computer_board.cells.values.map do |cell|

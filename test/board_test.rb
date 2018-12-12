@@ -1,9 +1,8 @@
-require './lib/board'
 require 'minitest/autorun'
 require 'minitest/pride'
-require './lib/cell'
 require './lib/ship'
-require 'pry'
+require './lib/cell'
+require './lib/board'
 
 class BoardTest < Minitest::Test
   def test_it_exists
@@ -44,7 +43,6 @@ class BoardTest < Minitest::Test
   end
 
   def test_placement_is_valid
-
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     submarine = Ship.new('Submarine', 2)
@@ -83,11 +81,9 @@ class BoardTest < Minitest::Test
     board = Board.new
     display = "  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n"
     assert_equal display, board.render
-    #assign board to variable
   end
 
   def test_board_can_render_optional_true
-
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     board.place(cruiser, ['A1', 'A2', 'A3'])
@@ -96,7 +92,6 @@ class BoardTest < Minitest::Test
   end
 
   def test_board_can_render_with_hits
-
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     board.place(cruiser, ['A1', 'A2', 'A3'])
@@ -106,7 +101,6 @@ class BoardTest < Minitest::Test
   end
 
   def test_board_can_render_with_misses
-
     board = Board.new
     board.cells["A3"].fire_upon
     display = "  1 2 3 4 \nA . . M . \nB . . . . \nC . . . . \nD . . . . \n"
@@ -114,7 +108,6 @@ class BoardTest < Minitest::Test
   end
 
   def test_board_can_render_a_sunken_ship
-
     board = Board.new
     submarine = Ship.new("Submarine", 2)
     board.place(submarine, ['A2', 'A3'])

@@ -57,7 +57,6 @@ class GameSetup
     end
   end
 
-
   def setup
     player_setup
     computer_setup

@@ -1,4 +1,3 @@
-require 'pry'
 require './lib/cell'
 require './lib/ship'
 
@@ -30,7 +29,6 @@ class Board
   def valid_coordinate?(coordinate)
     @cells.key?(coordinate)
   end
-
 
   def valid_placement?(ship, coordinates)
     all_values = []

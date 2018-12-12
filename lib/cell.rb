@@ -19,7 +19,7 @@ class Cell
   end
 
   def fire_upon
-    unless @ship.nil?
+    if @ship
       @ship.hit
     end
     @fired_upon = true
