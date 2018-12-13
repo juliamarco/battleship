@@ -1,7 +1,6 @@
 require './lib/board'
 require './lib/cell'
 require './lib/ship'
-require 'pry'
 
 class Turn
   attr_accessor :computer_coordinate,

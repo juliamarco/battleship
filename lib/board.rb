@@ -21,12 +21,14 @@ class Board
   end
 
   def valid_coordinates?(coordinates)
+    #sometimes you need to check the coordinates as a pair(when selecting when to place a ship)
     coordinates.all? do |coordinate|
       @cells.key?(coordinate)
     end
   end
 
   def valid_coordinate?(coordinate)
+    #sometimes you need to check a single coordinate(to fire upon a cell)
     @cells.key?(coordinate)
   end
 
@@ -56,29 +58,33 @@ class Board
     end
   end
 
-  def all_coordinate_pairs(coordinates)
-    coordinates.each_cons(2).map do |pair|
-      pair
-    end
-  end
-
   def all_letter_ordinates(coordinates)
-    all_coordinate_pairs(coordinates).flatten.map do |coordinate|
-    coordinate[0].ord
+    #in order to compare ordinates
+    coordinates.map do |coordinate|
+      coordinate[0].ord
     end
   end
 
   def all_number_ordinates(coordinates)
-    all_coordinate_pairs(coordinates).flatten.map do |coordinate|
-    coordinate[1].ord
+    #in order to compare ordinates
+    coordinates.map do |coordinate|
+      coordinate[1].ord
     end
   end
 
   def compare_ordinates(coordinates)
+    #to make sure something like [a1, a1] would not work
     if all_letter_ordinates(coordinates).uniq.length > 1 && all_number_ordinates(coordinates).uniq.length > 1
       false
     else
       true
+    end
+  end
+
+  def all_coordinate_pairs(coordinates)
+    #to check later on that they are consecutive
+    coordinates.each_cons(2).map do |pair|
+      pair
     end
   end
 
@@ -108,7 +114,7 @@ class Board
     numbers_letters_joined = numbers_array + letters_array[0]
     letters_array.delete_at(0)
     empty_display = letters_array.unshift(numbers_letters_joined)
-
+    #creates  ["  1 2 3 4 \nA", "\nB", "\nC", "\nD", "\n"]
     @cells.values.each do |cell|
       if show_ships == true
         cell_display << cell.render(true)
@@ -117,6 +123,7 @@ class Board
       end
     end
     cell_display = cell_display.each_slice(@number).to_a
+    #creates [".", ".", ".", "."] sliced by board number
     empty_display.zip(cell_display).flatten.compact.join(' ')
   end
 end

@@ -1,7 +1,6 @@
 require './lib/board'
 require './lib/cell'
 require './lib/ship'
-require 'pry'
 
 class GameSetup
   attr_accessor :turn,
@@ -134,7 +133,6 @@ class GameSetup
   def computer_setup
     while @player_ships.count.positive?
       computer_create_possible_placements
-      @turn.computer_board.render(true)
       @player_ships.shift
     end
   end
@@ -152,6 +150,7 @@ class GameSetup
   def computer_create_possible_placements
     loop do
       possible_horizontal_placements = computer_create_possible_coordinates.flatten.each_cons(@player_ships[0].length).map do |coordinates|
+      #creates all horizontal possiblities, e.g. [a1, a2], [a2, a3]
       coordinates
       end
       sorted_coordinates = computer_create_possible_coordinates
@@ -159,10 +158,12 @@ class GameSetup
       until sorted_coordinates[-1].empty?
         sorted_coordinates.each do |coordinate|
           array << coordinate[0]
+          #takes the first element from each array and creates new one, e.g. [a1, b1, c1, d1...]
           coordinate.shift
         end
       end
       possible_vertical_placements = array.each_cons(@player_ships[0].length).map do |coordinates|
+      #creates all vertical possibilities, e.g. [a1, b1], [c1, d1]
         coordinates
       end
       all_possible_placements = (possible_horizontal_placements + possible_vertical_placements)
