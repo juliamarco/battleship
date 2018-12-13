@@ -134,7 +134,6 @@ class GameSetup
   def computer_setup
     while @player_ships.count.positive?
       computer_create_possible_placements
-      @turn.computer_board.render(true)
       @player_ships.shift
     end
   end
